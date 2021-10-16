@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: DocWriter Test
+Bundle-SymbolicName: org.ingomohr.docwriter.tests
+Bundle-Version: 2.1.0.qualifier
+Bundle-Vendor: Ingo Mohr
+Fragment-Host: org.ingomohr.docwriter;bundle-version="1.0.0"
+Automatic-Module-Name: org.ingomohr.docwriter.tests
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Require-Bundle: org.junit;bundle-version="4.12.0",
+ org.apache.commons.io;bundle-version="2.6.0"
+Import-Package: org.junit.jupiter.api;version="5.0.0",
+ org.opentest4j

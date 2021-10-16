@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+	<feature url="features/org.ingomohr.docwriter.feature_2.1.0.qualifier.jar" id="org.ingomohr.docwriter.feature" version="2.1.0.qualifier">
+		<category name="Docwriter" />
+	</feature>
+	<category-def name="Docwriter" label="Docwriter" />
+</site>

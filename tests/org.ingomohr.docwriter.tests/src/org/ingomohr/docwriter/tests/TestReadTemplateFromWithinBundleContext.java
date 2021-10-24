@@ -1,6 +1,7 @@
 package org.ingomohr.docwriter.tests;
 
 import org.ingomohr.docwriter.tests.util.BddContext;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,6 +21,11 @@ public class TestReadTemplateFromWithinBundleContext {
 		context = new BddContext();
 	}
 
+	@AfterEach
+	void post() {
+		context.tearDown();
+	}
+
 	@Test
 	void readTemplateFromWorkspace_TemplateIsAvailable_TemplateWasReadSuccessfully() {
 		givenProjectExists();
@@ -29,6 +35,29 @@ public class TestReadTemplateFromWithinBundleContext {
 		whenSimpleDocxProcessorIsToldToWriteADocumentBasedOnExistingTemplate();
 
 		thenWrittenDocumentIsBasedOnExistingTemplate();
+	}
+
+	@Test
+	void readTemplateFromBundle_TemplateIsAvailable_TemplateWasReadSuccessfully() {
+		givenProjectExists();
+		givenDocxTemplateExistsInBundle();
+		givenSimpleDocxProcessorExists();
+
+		whenSimpleDocxProcessorIsToldToWriteADocumentBasedOnExistingTemplateFromBundle();
+
+		thenWrittenDocumentIsBasedOnExistingTemplateFromBundle();
+	}
+
+	private void thenWrittenDocumentIsBasedOnExistingTemplateFromBundle() {
+		context.thenWrittenDocumentIsBasedOnExistingTemplateFromBundle();
+	}
+
+	private void whenSimpleDocxProcessorIsToldToWriteADocumentBasedOnExistingTemplateFromBundle() {
+		context.whenSimpleDocxProcessorIsToldToWriteADocumentBasedOnExistingTemplateFromBundle();
+	}
+
+	private void givenDocxTemplateExistsInBundle() {
+		context.givenDocxTemplateExistsInBundle();
 	}
 
 	private void givenProjectExists() {

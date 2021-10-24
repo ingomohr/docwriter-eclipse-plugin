@@ -7,17 +7,38 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
+import org.docx4j.openpackaging.exceptions.Docx4JException;
+import org.docx4j.openpackaging.packages.WordprocessingMLPackage;
+import org.docx4j.wml.Text;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.FileLocator;
+import org.eclipse.core.runtime.Platform;
+import org.hamcrest.CoreMatchers;
+import org.hamcrest.MatcherAssert;
 import org.ingomohr.docwriter.docx.SimpleDocxProcessor;
+import org.ingomohr.docwriter.docx.util.DocxDataInspector;
 
 /**
  * Provides BDD methods for easier writing of tests.
+ * <p>
+ * Tests that use this context should call {@link #tearDown()} after they
+ * finished.
+ * </p>
  */
 public class BddContext {
+
+	private static final String TEMPLATE_TEXT = "TEMPLATE_TEXT";
+
+	private static final String TEMPLATE_FROM_BUNDLE_TEXT = "TEMPLATE_FROM_BUNDLE";
+
+	private static final String ADDED_TEXT = "ADDED_TEXT";
 
 	private IProject project;
 
@@ -39,7 +60,7 @@ public class BddContext {
 	public void givenDocxTemplateExistsInProject() {
 		SimpleDocxProcessor proc = new SimpleDocxProcessor();
 		proc.createDocument();
-		proc.addMarkdown("TEMPLATE_TEXT");
+		proc.addMarkdown(TEMPLATE_TEXT);
 
 		IFile wsFile = getTemplateFileFromWorkspace();
 		assertFalse(wsFile.exists(), "Expecting template file in workspace not to exist: " + wsFile);
@@ -73,13 +94,22 @@ public class BddContext {
 	}
 
 	public void whenSimpleDocxProcessorIsToldToWriteADocumentBasedOnExistingTemplate() {
+		whenSimpleDocxProcessorIsToldToWriteADocumentBasedOnExistingTemplate(
+				wsFileToFile(getTemplateFileFromWorkspace()));
+	}
+
+	public void whenSimpleDocxProcessorIsToldToWriteADocumentBasedOnExistingTemplateFromBundle() {
+		whenSimpleDocxProcessorIsToldToWriteADocumentBasedOnExistingTemplate(getTemplateFileFromBundle());
+	}
+
+	private void whenSimpleDocxProcessorIsToldToWriteADocumentBasedOnExistingTemplate(File existingTemplate) {
 		try {
-			processor.loadDocument(wsFileToFile(getTemplateFileFromWorkspace()));
+			processor.loadDocument(existingTemplate);
 		} catch (IOException e) {
 			fail("Cannot read template from workspace", e);
 		}
 
-		processor.addMarkdown("WRITING_ONTO_IMPORT_FROM_TEMPLATE");
+		processor.addMarkdown(ADDED_TEXT);
 
 		try {
 			processor.saveDocumentToPath(wsFileToFile(getTargetFileFromWorkspace()));
@@ -92,11 +122,57 @@ public class BddContext {
 	}
 
 	public void thenWrittenDocumentIsBasedOnExistingTemplate() {
-		final long lengthOfTemplate = wsFileToFile(getTemplateFileFromWorkspace()).length();
-		final long lengthOfTarget = wsFileToFile(getTargetFileFromWorkspace()).length();
+		thenWrittenDocumentIsBasedOnExistingTemplate(TEMPLATE_TEXT);
+	}
 
-		assertTrue(lengthOfTarget > lengthOfTemplate,
-				"Expected target file to be bigger than template file: " + lengthOfTarget + ":" + lengthOfTemplate);
+	public void thenWrittenDocumentIsBasedOnExistingTemplateFromBundle() {
+		thenWrittenDocumentIsBasedOnExistingTemplate(TEMPLATE_FROM_BUNDLE_TEXT);
+	}
+
+	private void thenWrittenDocumentIsBasedOnExistingTemplate(String expectedTemplateText) {
+		try {
+			String text = docxToText(wsFileToFile(getTargetFileFromWorkspace()));
+
+			MatcherAssert.assertThat(text, CoreMatchers.containsString(expectedTemplateText));
+			MatcherAssert.assertThat(text, CoreMatchers.containsString(ADDED_TEXT));
+
+		} catch (Docx4JException e) {
+			fail("Cannot read target docx", e);
+		}
+	}
+
+	public void givenDocxTemplateExistsInBundle() {
+		File file = getTemplateFileFromBundle();
+
+		assertTrue(file.length() > 0, "Expected template from bundle not to be empty");
+	}
+
+	private File getTemplateFileFromBundle() {
+		URL url = Platform.getBundle("org.ingomohr.docwriter.tests").getEntry("res/template-from-bundle.docx");
+		File file = null;
+		try {
+			file = new File(FileLocator.resolve(url).toURI());
+		} catch (Exception e) {
+			fail("Cannot find template from bundle", e);
+		}
+		return file;
+	}
+
+	/**
+	 * Deletes and data created by the context - so that the context doesn't break
+	 * tests that run later.
+	 */
+	public void tearDown() {
+		if (project != null) {
+			try {
+				project.delete(true, null);
+			} catch (CoreException e) {
+				System.err.println("Error deleting project: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
+
+		processor = null;
 	}
 
 	private IFile getTemplateFileFromWorkspace() {
@@ -109,6 +185,19 @@ public class BddContext {
 
 	private static File wsFileToFile(IFile file) {
 		return file.getLocation().toFile();
+	}
+
+	private static String docxToText(File file) throws Docx4JException {
+		List<String> vals = new ArrayList<>();
+
+		WordprocessingMLPackage doc = WordprocessingMLPackage.load(file);
+
+		List<Text> ts = new DocxDataInspector().getAllElements(doc.getMainDocumentPart(), Text.class);
+		for (Text text : ts) {
+			vals.add(text.getValue());
+		}
+
+		return String.join(",", vals);
 	}
 
 }

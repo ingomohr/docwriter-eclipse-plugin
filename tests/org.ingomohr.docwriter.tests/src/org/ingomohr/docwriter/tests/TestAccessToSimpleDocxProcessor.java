@@ -9,6 +9,13 @@ import java.io.IOException;
 import org.ingomohr.docwriter.docx.SimpleDocxProcessor;
 import org.junit.jupiter.api.Test;
 
+/**
+ * Tests that a document can be created and written out using the wrapped
+ * docwriter maven artifact.
+ * <p>
+ * This is to prove that all required dependencies are included.
+ * </p>
+ */
 public class TestAccessToSimpleDocxProcessor {
 
 	@Test

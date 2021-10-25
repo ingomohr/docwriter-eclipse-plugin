@@ -17,6 +17,8 @@ This is an Eclipse plugin to wrap the [docwriter](https://github.com/ingomohr/do
 ## Updatesite
 https://raw.githubusercontent.com/ingomohr/docwriter-eclipse-plugin/updatesite/updatesite
 
+(Don't worry about the "_404: Not Found_" displayed when you open that URL on your browser.)
+
 ## How to Install to Eclipse
 1. In Eclipse open Help -> Install New Software...
 2. In the dialog that opens up paste the updatesite URL into "Work with:" text field and hit ENTER

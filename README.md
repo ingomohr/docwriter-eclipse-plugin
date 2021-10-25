@@ -11,6 +11,9 @@ This is an Eclipse plugin to wrap the [docwriter](https://github.com/ingomohr/do
 - Java 8
 - Eclipse 2020-06
 
+### Why that old Java and Eclipse?
+... because we need the plugin to run right now in an old Java JRE and a target platform of 2020-06. (Hopefully that will change in the future).
+
 ## Updatesite
 https://raw.githubusercontent.com/ingomohr/docwriter-eclipse-plugin/updatesite/updatesite
 

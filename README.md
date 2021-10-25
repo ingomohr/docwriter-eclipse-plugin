@@ -21,3 +21,6 @@ https://raw.githubusercontent.com/ingomohr/docwriter-eclipse-plugin/updatesite/u
 4. Click button "Finish" and follow the installation instructions.
 5. When Eclipse notifies you that the plugin is not signed, just click "Install anyway".
 6. When Eclipse asks you to restart, restart Eclipse.
+
+## Examples
+See the [examples](https://github.com/ingomohr/docwriter/wiki/Examples) in the [docwriter](https://github.com/ingomohr/docwriter) repo.

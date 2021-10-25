@@ -6,7 +6,7 @@ name: Build Branch
 on:
   push:
     branches-ignore:
-      - master
+      - main
     tags-ignore:
       - '**'
 

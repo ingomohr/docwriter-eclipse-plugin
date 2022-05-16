@@ -2,6 +2,8 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](https://opensource.org/licenses/Apache-2.0)
 [![GitHub release](https://img.shields.io/github/release/ingomohr/docwriter-eclipse-plugin.svg)](https://GitHub.com/ingomohr/docwriter-eclipse-plugin/releases/)
 
+⚠️ _Legacy: As discussed w/ the team on May 16th, we won't update this plugin anymore._
+
 # docwriter-eclipse-plugin
 
 ## What is this?

@@ -1,6 +1,6 @@
 [![License](https://img.shields.io/badge/License-Apache%202.0-yellow.svg)](https://opensource.org/licenses/Apache-2.0)
 
-⚠️ _Legacy: As discussed w/ the team on May 16th, we won't update this plugin anymore._
+⚠️ _Legacy: As discussed w/ the team on May 16th 2022, we won't update this plugin anymore._
 
 # docwriter-eclipse-plugin
 

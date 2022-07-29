@@ -37,5 +37,5 @@ jobs:
           path-to-p2-repo-created-by-maven: 'sites/org.ingomohr.docwriter.updatesite/target'
           path-to-p2-repo-target: 'updatesite'
           commit-message: 'add new updatesite'
-          target-branch-name: builds-${{ steps.fetch_branch.outputs.branch }}
+          target-branch-name: dev-updatesite-${{ steps.fetch_branch.outputs.branch }}
 
